@@ -13,12 +13,23 @@ public class AppDbContext : DbContext
     });
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Address> Addresses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        const string connectionString = "Server=(localdb)\\mssqllocaldb;Database=PosteDB;TrustServerCertificate=True;Trusted_Connection=True;";
+        const string connectionString = "Server=ACADEMYFSPD11\\SQLEXPRESS;Database=PosteDB;TrustServerCertificate=True;Trusted_Connection=True;";
         optionsBuilder.UseSqlServer(connectionString)
             .EnableSensitiveDataLogging()
             .UseLoggerFactory(MyFactory);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Addresses)
+            .WithOne(a => a.User)
+            .HasForeignKey(a => a.UserId);
+
+        base.OnModelCreating(modelBuilder);
     }
 }

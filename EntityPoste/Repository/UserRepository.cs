@@ -1,5 +1,6 @@
 using EntityPoste.Domain;
 using EntityPoste.SeedWork;
+using Microsoft.EntityFrameworkCore;
 
 namespace EntityPoste.Repository;
 
@@ -12,11 +13,7 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
 
     public void Insert(string name, string email)
     {
-        ctx.Users.Add(new()
-        {
-            Name = name,
-            Email = email
-        });
+        ctx.Users.Add(new User(name, email));
         ctx.SaveChanges();
     }
 
@@ -24,7 +21,7 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
     {
         var user = ctx.Users.Find(id);
         if (user == null) return;
-        user.Email = email;
+        user.UpdateEmail(email);
         ctx.SaveChanges();
     }
 
@@ -38,7 +35,11 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
 
     public IEnumerable<User> GetUsers() => ctx.Users.ToList();
 
-    public IEnumerable<User> GetUsersByProvider(string provider) => ctx.Users.Where(u => u.Email.Contains(provider));
+    //public IEnumerable<User> GetUsersByProvider(string provider) => ctx.Users.Where(u => u.Email.Contains(provider));
+    public IEnumerable<User> GetUsersByProvider(string provider)
+    {
+        return ctx.Users.Where(u => u.Email.Contains(provider)).Include(u => u.Addresses);
+    }
 
     public IEnumerable<string> GetProviders() => ctx.Users.Select(u => u.Email.Substring(u.Email.IndexOf("@") + 1)).Distinct();
 

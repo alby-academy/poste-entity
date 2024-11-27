@@ -139,6 +139,12 @@ public class UnitOfWork(IUserRepository userRepository) : IDisposable
             return;
         }
 
-        foreach (var user in materialized) WriteLine(user.ToString());
+        foreach (var user in materialized)
+        {
+            WriteLine(user.ToString());
+
+            foreach (var address in user.Addresses)
+                WriteLine(" - {0}", address.ToString()); 
+        }
     }
 }
