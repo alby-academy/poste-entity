@@ -35,7 +35,11 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
     //public IEnumerable<User> GetUsersByProvider(string provider) => ctx.Users.Where(u => u.Email.Contains(provider));
     public IEnumerable<User> GetUsersByProvider(string provider)
     {
-        return ctx.Users.Where(u => u.Email.Contains(provider)).Include(u => u.Addresses);
+        return 
+            from user in ctx.Users
+            join address in ctx.Addresses on user.Id equals address.UserId
+            where user.Email.Contains(provider)
+            select user;
     }
 
     public IEnumerable<string> GetProviders() => ctx.Users.Select(u => u.Email.Substring(u.Email.IndexOf("@") + 1)).Distinct();
