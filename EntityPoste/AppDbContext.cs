@@ -1,10 +1,11 @@
 using EntityPoste.Domain;
+using EntityPoste.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EntityPoste;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IUnitOfWork
 {
     private static readonly ILoggerFactory MyFactory = LoggerFactory.Create(b =>
     {
@@ -17,7 +18,7 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        const string connectionString = "Server=ACADEMYFSPD11\\SQLEXPRESS;Database=PosteDB;TrustServerCertificate=True;Trusted_Connection=True;";
+        const string connectionString = "Server=(localdb)\\mssqllocaldb;Database=PosteDB;TrustServerCertificate=True;Trusted_Connection=True;";
         optionsBuilder.UseSqlServer(connectionString)
             .EnableSensitiveDataLogging()
             .UseLoggerFactory(MyFactory);

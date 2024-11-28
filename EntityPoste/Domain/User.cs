@@ -13,17 +13,16 @@ public record User(string Name, string Email, int Id = 0, ICollection<Address>? 
 
     public void UpdateEmail(string Email)
     {
-        if (!IsValidEmail(Email))
-            return;
+        if (!IsValidEmail(Email)) return;
 
         this.Email = Email;
     }
 
-    public static bool IsValidEmail(string email)
+    private static bool IsValidEmail(string email)
     {
         try
         {
-            var mailAddress = new MailAddress(email);
+            var _ = new MailAddress(email);
             return true;
         }
         catch (FormatException)

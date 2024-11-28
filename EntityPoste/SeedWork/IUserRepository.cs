@@ -2,7 +2,7 @@ using EntityPoste.Domain;
 
 namespace EntityPoste.SeedWork;
 
-public interface IUserRepository : IDisposable
+public interface IUserRepository : IDisposable, IUnitOfWork
 {
     public void Insert(string name, string email);
     public void Update(int id, string email);

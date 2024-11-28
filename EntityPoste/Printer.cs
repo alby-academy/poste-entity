@@ -5,7 +5,7 @@ using static System.Console;
 
 namespace EntityPoste;
 
-public class UnitOfWork(IUserRepository userRepository) : IDisposable
+public class Printer(IUserRepository userRepository) : IDisposable
 {
     public void Dispose()
     {
@@ -85,6 +85,8 @@ public class UnitOfWork(IUserRepository userRepository) : IDisposable
         }
 
         userRepository.Insert(userName, email);
+        userRepository.Insert(userName, email);
+        userRepository.SaveChanges();
     }
 
     private void Update()

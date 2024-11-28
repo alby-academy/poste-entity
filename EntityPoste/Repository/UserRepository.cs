@@ -14,7 +14,6 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
     public void Insert(string name, string email)
     {
         ctx.Users.Add(new User(name, email));
-        ctx.SaveChanges();
     }
 
     public void Update(int id, string email)
@@ -22,7 +21,6 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
         var user = ctx.Users.Find(id);
         if (user == null) return;
         user.UpdateEmail(email);
-        ctx.SaveChanges();
     }
 
     public void Delete(int id)
@@ -30,7 +28,6 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
         var user = ctx.Users.Find(id);
         if (user == null) return;
         ctx.Users.Remove(user);
-        ctx.SaveChanges();
     }
 
     public IEnumerable<User> GetUsers() => ctx.Users.ToList();
@@ -44,4 +41,5 @@ public class UserRepository(AppDbContext ctx) : IUserRepository, IAsyncDisposabl
     public IEnumerable<string> GetProviders() => ctx.Users.Select(u => u.Email.Substring(u.Email.IndexOf("@") + 1)).Distinct();
 
     public void Dispose() => ctx.Dispose();
+    public int SaveChanges() => ctx.SaveChanges();
 }
